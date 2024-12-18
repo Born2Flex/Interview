@@ -17,5 +17,5 @@ public interface InterviewMapper {
 
     InterviewDocument toDocument(InterviewCreateDto dto);
 
-    void updateDocument(InterviewUpdateDto dto, @MappingTarget InterviewDocument document);
+    InterviewDocument updateDocument(@MappingTarget InterviewDocument document, InterviewUpdateDto dto);
 }

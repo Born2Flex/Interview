@@ -1,19 +1,21 @@
 package ua.edu.internship.interview.service.dto.interview;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ua.edu.internship.interview.data.enumeration.InterviewStatus;
 import ua.edu.internship.interview.service.dto.interview.question.InterviewQuestionDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class InterviewDto {
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class InterviewDto extends InterviewBaseDto {
     private String id;
-    private String interviewerId;
-    private String candidateId;
-    private String title;
     private InterviewStatus status;
-    private LocalDateTime plannedTime;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String feedback;

@@ -1,18 +1,11 @@
 package ua.edu.internship.interview.service.dto.interview;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class InterviewCreateDto {
-    @NotBlank
-    private String interviewerId;
-    @NotBlank
-    private String candidateId;
-    @NotBlank
-    private String title;
-    @Future
-    private LocalDateTime plannedTime;
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class InterviewCreateDto extends InterviewBaseDto {
 }

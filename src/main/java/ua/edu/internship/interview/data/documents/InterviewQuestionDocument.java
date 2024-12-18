@@ -6,24 +6,22 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Getter
 @Setter
 @Builder
 @Document
 public class InterviewQuestionDocument {
     @Id
-    @EqualsAndHashCode.Include
     @Field("id")
-    private String id;
-    @DocumentReference
+    private ObjectId id;
     @Field("question")
     private UserQuestionDocument question;
     @Field("grade")

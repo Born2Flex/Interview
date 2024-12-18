@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,20 +17,19 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Getter
 @Setter
 @Builder
 @Document(collection = "interviews")
 public class InterviewDocument {
     @Id
-    @EqualsAndHashCode.Include
     @Field(name = "id")
-    private String id;
+    private ObjectId id;
     @Field(name = "interviewerId")
-    private String interviewerId;
+    private Long interviewerId;
     @Field(name = "candidateId")
-    private String candidateId;
+    private Long candidateId;
     @Field(name = "title")
     private String title;
     @Field(name = "status")

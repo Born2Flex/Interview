@@ -8,11 +8,11 @@ import ua.edu.internship.interview.service.dto.interview.question.InterviewQuest
 import ua.edu.internship.interview.service.dto.interview.question.InterviewQuestionUpdateDto;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
-@Mapper(componentModel = SPRING, uses = UserQuestionMapper.class)
+@Mapper(componentModel = SPRING, uses = {BaseMapper.class, UserQuestionMapper.class})
 public interface InterviewQuestionMapper {
     InterviewQuestionDocument toDocument(InterviewQuestionCreateDto dto);
 
     InterviewQuestionDto toDto(InterviewQuestionDocument document);
 
-    void updateDocument(InterviewQuestionUpdateDto dto, @MappingTarget InterviewQuestionDocument document);
+    InterviewQuestionDocument updateDocument(@MappingTarget InterviewQuestionDocument document, InterviewQuestionUpdateDto dto);
 }

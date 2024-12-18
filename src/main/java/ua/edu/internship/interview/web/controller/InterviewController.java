@@ -58,9 +58,7 @@ public class InterviewController {
         service.deleteInterviewById(interviewId);
     }
 
-
 //TODO Add comment in pull request, so it would be reasonable to add this endpoint
-
     @PatchMapping("/{interviewId}/status")
     public InterviewDto updateInterviewStatus(@PathVariable String interviewId, @RequestBody InterviewStatus status) {
         return service.updateInterviewStatus(interviewId, status);
@@ -73,12 +71,14 @@ public class InterviewController {
 
     @PostMapping("/{interviewId}/questions")
     @ResponseStatus(HttpStatus.CREATED)
-    public InterviewQuestionDto createInterviewQuestion(@PathVariable String interviewId, @RequestBody @Valid InterviewQuestionCreateDto dto) {
+    public InterviewQuestionDto createInterviewQuestion(@PathVariable String interviewId,
+                                                        @RequestBody @Valid InterviewQuestionCreateDto dto) {
         return service.createInterviewQuestion(interviewId, dto);
     }
 
     @PatchMapping("/{interviewId}/questions/{questionId}")
-    public InterviewQuestionDto updateInterviewQuestion(@PathVariable String interviewId, @PathVariable String questionId,
+    public InterviewQuestionDto updateInterviewQuestion(@PathVariable String interviewId,
+                                                        @PathVariable String questionId,
                                                         @RequestBody @Valid InterviewQuestionUpdateDto dto) {
         return service.updateInterviewQuestion(interviewId, questionId, dto);
     }

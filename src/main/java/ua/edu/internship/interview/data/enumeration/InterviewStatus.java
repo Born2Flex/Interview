@@ -9,6 +9,7 @@ public enum InterviewStatus {
     ACTIVE,
     COMPLETED,
     CANCELLED;
+
     private Set<InterviewStatus> transitions;
 
     static {
@@ -16,6 +17,10 @@ public enum InterviewStatus {
         ACTIVE.transitions = EnumSet.of(COMPLETED, CANCELLED);
         COMPLETED.transitions = EnumSet.noneOf(InterviewStatus.class);
         CANCELLED.transitions = EnumSet.noneOf(InterviewStatus.class);
+    }
+
+    public Set<InterviewStatus> getTransitions() {
+        return transitions;
     }
 
     public static void validateStatusTransition(InterviewStatus currentStatus, InterviewStatus newStatus) {
