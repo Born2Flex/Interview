@@ -1,0 +1,34 @@
+{
+  "insert": "user_skills",
+  "documents": [
+    {
+      "_id": { "$oid": "6759ff428b05be16b2f64329" },
+      "_class": "ua.edu.internship.interview.data.documents.UserSkillsDocument",
+      "userId": "123",
+      "skills": [
+        { "$oid": "67483c5c8e8573107761acf1" },
+        { "$oid": "67483c5c8e8573107761acf2" },
+        { "$oid": "67483c5c8e8573107761acf3" }
+      ]
+    },
+    {
+      "_id": { "$oid": "6759ff428b05be16b2f64330" },
+      "_class": "ua.edu.internship.interview.data.documents.UserSkillsDocument",
+      "userId": "456L",
+      "skills": [
+        { "$oid": "67483c5c8e8573107761acf2" },
+        { "$oid": "67483c5c8e8573107761acf3" }
+      ]
+    },
+    {
+      "_id": { "$oid": "6759ff428b05be16b2f64331" },
+      "_class": "ua.edu.internship.interview.data.documents.UserSkillsDocument",
+      "userId": "789L",
+      "skills": [
+        { "$oid": "67483c5c8e8573107761acf1" },
+        { "$oid": "67483c5c8e8573107761acf2" },
+        { "$oid": "67483c5c8e8573107761acf3" }
+      ]
+    }
+  ]
+}
