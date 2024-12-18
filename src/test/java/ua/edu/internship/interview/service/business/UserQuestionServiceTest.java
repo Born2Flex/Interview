@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ua.edu.internship.interview.utils.TestUtils.createUserQuestionDocument;
+import static ua.edu.internship.interview.utils.TestUtils.createUserQuestionUpdateDto;
 import java.util.List;
 import java.util.Optional;
 
@@ -234,8 +236,7 @@ class UserQuestionServiceTest {
         UserQuestionUpdateDto updateDto = createUserQuestionUpdateDto(
                 "Updated text", skillId, QuestionDifficulty.EASY, QuestionType.SOFT_SKILLS);
         UserQuestionDocument updatedDocument = createUserQuestionDocument(
-                questionObjectId, userId, "Updated text", QuestionDifficulty.EASY,
-                QuestionType.SOFT_SKILLS, updatedSkillDocument);
+                questionId, userId, updatedSkillDocument, "Updated text", QuestionDifficulty.EASY, QuestionType.SOFT_SKILLS);
         when(userQuestionRepository.findByIdAndUserId(questionObjectId, userId)).thenReturn(Optional.of(userQuestionDocument));
         when(skillRepository.findById(skillObjectId)).thenReturn(Optional.of(updatedSkillDocument));
         when(userQuestionMapper.updateDocument(userQuestionDocument, updateDto)).thenReturn(updatedDocument);
@@ -267,8 +268,7 @@ class UserQuestionServiceTest {
         UserQuestionUpdateDto updateDto = createUserQuestionUpdateDto(
                 "Updated text", skillId, QuestionDifficulty.EASY, QuestionType.SOFT_SKILLS);
         UserQuestionDocument updatedDocument = createUserQuestionDocument(
-                questionObjectId, userId, "Updated text", QuestionDifficulty.EASY,
-                QuestionType.SOFT_SKILLS, updatedSkillDocument);
+                questionId, userId, updatedSkillDocument, "Updated text", QuestionDifficulty.EASY, QuestionType.SOFT_SKILLS);
         when(userQuestionRepository.findByIdAndUserId(questionObjectId, userId)).thenReturn(Optional.of(userQuestionDocument));
         when(skillRepository.findById(skillObjectId)).thenReturn(Optional.of(updatedSkillDocument));
         when(userQuestionMapper.updateDocument(userQuestionDocument, updateDto)).thenReturn(updatedDocument);
@@ -346,26 +346,5 @@ class UserQuestionServiceTest {
     private void matchSkillFields(SkillDto expected, SkillDto actual) {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getName(), actual.getName());
-    }
-
-    private UserQuestionUpdateDto createUserQuestionUpdateDto(String text, String skillId, QuestionDifficulty difficulty,
-                                                              QuestionType type) {
-        return UserQuestionUpdateDto.builder()
-                .text(text)
-                .skillId(skillId)
-                .difficulty(difficulty)
-                .type(type).build();
-    }
-
-    private UserQuestionDocument createUserQuestionDocument(ObjectId id, Long userId, String text,
-                                                            QuestionDifficulty difficulty, QuestionType type,
-                                                            SkillDocument skill) {
-        return UserQuestionDocument.builder()
-                .id(id)
-                .userId(userId)
-                .text(text)
-                .skill(skill)
-                .difficulty(difficulty)
-                .type(type).build();
     }
 }

@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
+import static ua.edu.internship.interview.utils.TestUtils.buildSkillDto;
+import static ua.edu.internship.interview.utils.TestUtils.createSkillDocument;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -48,8 +50,8 @@ class UserSkillsServiceTest {
 
     @BeforeEach
     void setUp() {
-        skillDocuments = List.of(buildSkillDoc("123456789123456789123451", "Java"),
-                buildSkillDoc("123456789123456789123452", "Kotlin"));
+        skillDocuments = List.of(createSkillDocument("123456789123456789123451", "Java"),
+                createSkillDocument("123456789123456789123452", "Kotlin"));
         skillDTOs = List.of(buildSkillDto("123456789123456789123451", "Java"),
                 buildSkillDto("123456789123456789123452", "Kotlin"));
         userSkillsDocument = UserSkillsDocument.builder().userId(1L).skills(skillDocuments).build();
@@ -166,8 +168,8 @@ class UserSkillsServiceTest {
         String skillId2 = "123456789123456789123453";
         List<String> skillIds = List.of(skillId1, skillId2);
         List<ObjectId> skillObjectIds = List.of(new ObjectId(skillId1), new ObjectId(skillId2));
-        skillDocuments = List.of(buildSkillDoc("123456789123456789123451", "Java"),
-                buildSkillDoc("123456789123456789123453", "C++"));
+        skillDocuments = List.of(createSkillDocument("123456789123456789123451", "Java"),
+                createSkillDocument("123456789123456789123453", "C++"));
         skillDTOs = List.of(buildSkillDto("123456789123456789123451", "Java"),
                 buildSkillDto("123456789123456789123453", "Kotlin"));
         userSkillsDto.setSkills(skillDTOs);
@@ -201,8 +203,8 @@ class UserSkillsServiceTest {
         String skillId2 = "123456789123456789123453";
         List<String> skillIds = List.of(skillId1, skillId2);
         List<ObjectId> skillObjectIds = List.of(new ObjectId(skillId1), new ObjectId(skillId2));
-        skillDocuments = List.of(buildSkillDoc("123456789123456789123451", "Java"),
-                buildSkillDoc("123456789123456789123453", "C++"));
+        skillDocuments = List.of(createSkillDocument("123456789123456789123451", "Java"),
+                createSkillDocument("123456789123456789123453", "C++"));
         skillDTOs = List.of(buildSkillDto("123456789123456789123451", "Java"),
                 buildSkillDto("123456789123456789123453", "Kotlin"));
         userSkillsDto.setSkills(skillDTOs);
@@ -295,11 +297,4 @@ class UserSkillsServiceTest {
         assertEquals(expected.getName(), actual.getName());
     }
 
-    private SkillDto buildSkillDto(String id, String name) {
-        return new SkillDto(id, name);
-    }
-
-    private SkillDocument buildSkillDoc(String id, String name) {
-        return SkillDocument.builder().id(new ObjectId(id)).name(name).build();
-    }
 }

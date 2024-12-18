@@ -145,8 +145,9 @@ public class InterviewService {
         List<InterviewDocument> conflictingInterviews = interviewRepository
                 .findInterviewsInTimeWindow(interview.getInterviewerId(), interview.getCandidateId(), from, to);
         if (!conflictingInterviews.isEmpty()) {
-            String exceptionMessage = String.format("Cannot create interview for interviewer with id '%s' and " +
-                            "candidate with id '%s' at %s. The interview time conflicts with existing interviews.",
+            String exceptionMessage =
+                    String.format("Cannot create interview for interviewer with id '%s' and candidate with id '%s' " +
+                                    "at %s. Interview conflicts with existing interviews.",
                     interview.getInterviewerId(), interview.getCandidateId(), plannedTime);
             throw new InterviewCollisionException(exceptionMessage);
         }
