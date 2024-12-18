@@ -29,6 +29,7 @@ import static ua.edu.internship.interview.data.enumeration.InterviewStatus.valid
 @Service
 @RequiredArgsConstructor
 public class InterviewService {
+    public static final int TIME_WINDOW_OFFSET_IN_HOURS = 1;
     private final InterviewRepository interviewRepository;
     private final UserQuestionRepository userQuestionRepository;
     private final InterviewMapper interviewMapper;
@@ -71,20 +72,20 @@ public class InterviewService {
 
     public void deleteInterviewById(String interviewId) {
         log.info("Attempting to delete interview with id: {}", interviewId);
-        interviewRepository.deleteById(interviewId);
+        interviewRepository.deleteById(new ObjectId(interviewId));
         log.info("Interview with id: {} deleted successfully", interviewId);
     }
 
     public InterviewDto updateInterviewStatus(String interviewId, InterviewStatus newStatus) {
         log.info("Attempting to update status for interview with id: {}", interviewId);
         InterviewDocument interviewDocument = getInterviewByIdOrElseThrow(interviewId);
-        updateInterviewStatusAndTime(interviewDocument, newStatus);
-        InterviewDocument updatedInterview = interviewRepository.save(interviewDocument);
-        log.info("Updated status for interview with id: {}", updatedInterview.getId());
-        return interviewMapper.toDto(updatedInterview);
+        InterviewDocument updatedInterviewDocument = updateInterviewStatusAndTime(interviewDocument, newStatus);
+        InterviewDocument savedInterviewDocument = interviewRepository.save(updatedInterviewDocument);
+        log.info("Updated status for interview with id: {}", savedInterviewDocument.getId());
+        return interviewMapper.toDto(savedInterviewDocument);
     }
 
-    private void updateInterviewStatusAndTime(InterviewDocument interviewDocument, InterviewStatus newStatus) {
+    private InterviewDocument updateInterviewStatusAndTime(InterviewDocument interviewDocument, InterviewStatus newStatus) {
         validateStatusTransition(interviewDocument.getStatus(), newStatus);
         interviewDocument.setStatus(newStatus);
         if (newStatus == InterviewStatus.ACTIVE) {
@@ -92,6 +93,7 @@ public class InterviewService {
         } else if (newStatus == InterviewStatus.COMPLETED) {
             interviewDocument.setEndTime(LocalDateTime.now());
         }
+        return interviewDocument;
     }
 
     public InterviewDto updateInterviewFeedback(String interviewId, String feedback) {
@@ -114,15 +116,16 @@ public class InterviewService {
     }
 
     private InterviewQuestionDocument createInterviewQuestionDocumentFromDto(InterviewQuestionCreateDto dto) {
-        UserQuestionDocument userQuestionDocument = getUserQuestionByIdOrElseThrow(dto.getUserQuestionId());
-        return InterviewQuestionDocument.builder().question(userQuestionDocument).build();
+        return InterviewQuestionDocument.builder()
+                .question(getUserQuestionByIdOrElseThrow(dto.getUserQuestionId()))
+                .build();
     }
 
     public InterviewQuestionDto updateInterviewQuestion(String interviewId, String questionId,
                                                         InterviewQuestionUpdateDto dto) {
         log.info("Attempting to update interview question for interview with id: {}", interviewId);
         InterviewDocument interviewDocument = getInterviewByIdOrElseThrow(interviewId);
-        InterviewQuestionDocument questionDocument = getInterviewQuestionOrElseThrow(questionId, interviewDocument);
+        InterviewQuestionDocument questionDocument = getInterviewQuestionByIdOrElseThrow(questionId, interviewDocument);
         questionDocument = questionMapper.updateDocument(questionDocument, dto);
         interviewRepository.save(interviewDocument);
         log.info("Updated interview question for interview with id: {}", interviewDocument.getId());
@@ -140,11 +143,11 @@ public class InterviewService {
 
     private void validateInterviewNotCausingConflicts(InterviewDocument interview) {
         LocalDateTime plannedTime = interview.getPlannedTime();
-        LocalDateTime from = plannedTime.minusHours(1);
-        LocalDateTime to = plannedTime.plusHours(1);
-        List<InterviewDocument> conflictingInterviews = interviewRepository
-                .findInterviewsInTimeWindow(interview.getInterviewerId(), interview.getCandidateId(), from, to);
-        if (!conflictingInterviews.isEmpty()) {
+        LocalDateTime from = plannedTime.minusHours(TIME_WINDOW_OFFSET_IN_HOURS);
+        LocalDateTime to = plannedTime.plusHours(TIME_WINDOW_OFFSET_IN_HOURS);
+        boolean existsInterviews = interviewRepository
+                .existsInterviewsInTimeWindow(interview.getInterviewerId(), interview.getCandidateId(), from, to);
+        if (existsInterviews) {
             String exceptionMessage =
                     String.format("Cannot create interview for interviewer with id '%s' and candidate with id '%s' " +
                                     "at %s. Interview conflicts with existing interviews.",
@@ -154,21 +157,22 @@ public class InterviewService {
     }
 
     private InterviewDocument getInterviewByIdOrElseThrow(String id) {
-        return interviewRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("Interview not found"));
+        return interviewRepository.findById(new ObjectId(id))
+                .orElseThrow(() -> new NoSuchEntityException("Interview not found by id: " + id));
     }
 
     private UserQuestionDocument getUserQuestionByIdOrElseThrow(String id) {
         return userQuestionRepository.findById(new ObjectId(id))
-                .orElseThrow(() -> new NoSuchEntityException("User Question not found"));
+                .orElseThrow(() -> new NoSuchEntityException("User Question not found by id: " + id));
     }
 
-    private InterviewQuestionDocument getInterviewQuestionOrElseThrow(String questionId,
-                                                                      InterviewDocument interviewDocument) {
+    private InterviewQuestionDocument getInterviewQuestionByIdOrElseThrow(String questionId,
+                                                                          InterviewDocument interviewDocument) {
         ObjectId questionObjectId = new ObjectId(questionId);
         return interviewDocument.getQuestions().stream()
                 .filter(q -> q.getId().equals(questionObjectId))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchEntityException("Interview Question not found"));
+                .orElseThrow(() -> new NoSuchEntityException("Interview Question not found by id: " + questionId));
     }
 
     private void validateUserExistsById(Long userId) {

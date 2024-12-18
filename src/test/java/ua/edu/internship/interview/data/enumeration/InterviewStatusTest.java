@@ -3,7 +3,7 @@ package ua.edu.internship.interview.data.enumeration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import ua.edu.internship.interview.service.utils.exceptions.InvalidStateTransitionException;
+import ua.edu.internship.interview.service.utils.exceptions.InvalidStatusTransitionException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -23,7 +23,7 @@ class InterviewStatusTest {
     void shouldReturnFalseForInvalidTransitions(InterviewStatus currentStatus) {
         for (InterviewStatus newStatus : InterviewStatus.values()) {
             if (!currentStatus.getTransitions().contains(newStatus)) {
-                assertThrows(InvalidStateTransitionException.class,
+                assertThrows(InvalidStatusTransitionException.class,
                         () -> InterviewStatus.validateStatusTransition(currentStatus, newStatus));
             }
         }

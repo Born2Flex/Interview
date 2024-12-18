@@ -1,6 +1,6 @@
 package ua.edu.internship.interview.data.enumeration;
 
-import ua.edu.internship.interview.service.utils.exceptions.InvalidStateTransitionException;
+import ua.edu.internship.interview.service.utils.exceptions.InvalidStatusTransitionException;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -25,7 +25,7 @@ public enum InterviewStatus {
 
     public static void validateStatusTransition(InterviewStatus currentStatus, InterviewStatus newStatus) {
         if (!currentStatus.transitions.contains(newStatus)) {
-            throw new InvalidStateTransitionException("Invalid transition from " + currentStatus + " to " + newStatus);
+            throw new InvalidStatusTransitionException("Invalid transition from " + currentStatus + " to " + newStatus);
         }
     }
 }

@@ -9,6 +9,7 @@ import ua.edu.internship.interview.data.enumeration.InterviewStatus;
 import ua.edu.internship.interview.data.enumeration.QuestionDifficulty;
 import ua.edu.internship.interview.data.enumeration.QuestionType;
 import ua.edu.internship.interview.service.dto.interview.InterviewDto;
+import ua.edu.internship.interview.service.dto.interview.InterviewUpdateDto;
 import ua.edu.internship.interview.service.dto.interview.question.InterviewQuestionDto;
 import ua.edu.internship.interview.service.dto.skill.SkillDto;
 import ua.edu.internship.interview.service.dto.user.question.UserQuestionDto;
@@ -71,6 +72,14 @@ public final class TestUtils {
                 .build();
     }
 
+    public static InterviewQuestionDocument createInterviewQuestionDocumentWithoutId(UserQuestionDocument questionDocument,
+                                                                            Integer grade) {
+        return InterviewQuestionDocument.builder()
+                .question(questionDocument)
+                .grade(grade)
+                .build();
+    }
+
     public static InterviewQuestionDocument createInterviewQuestionDocument(String questionId,
                                                                              UserQuestionDocument questionDocument,
                                                                              Integer grade) {
@@ -83,7 +92,7 @@ public final class TestUtils {
 
     public static InterviewQuestionDto createInterviewQuestionDto(InterviewQuestionDocument interviewQuestionDocument) {
         return InterviewQuestionDto.builder()
-                .id(interviewQuestionDocument.getId().toString())
+                .id(interviewQuestionDocument.getId() != null ? interviewQuestionDocument.getId().toString() : null)
                 .question(createUserQuestionDto(interviewQuestionDocument.getQuestion()))
                 .grade(interviewQuestionDocument.getGrade())
                 .build();
@@ -115,6 +124,13 @@ public final class TestUtils {
                 .endTime(interviewDocument.getEndTime())
                 .feedback(interviewDocument.getFeedback())
                 .questions(interviewDocument.getQuestions().stream().map(TestUtils::createInterviewQuestionDto).toList())
+                .build();
+    }
+
+    public static InterviewUpdateDto createInterviewUpdateDto(String title, LocalDateTime plannedTime) {
+        return InterviewUpdateDto.builder()
+                .title(title)
+                .plannedTime(plannedTime)
                 .build();
     }
 }
