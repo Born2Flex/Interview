@@ -112,6 +112,20 @@ public final class TestUtils {
                 .build();
     }
 
+    public static InterviewDocument createInterviewDocument(String interviewId, Long interviewerId, Long candidateId,
+                                                            String title, InterviewStatus status, LocalDateTime dateTime,
+                                                            List<InterviewQuestionDocument> questions) {
+        return InterviewDocument.builder()
+                .id(new ObjectId(interviewId))
+                .interviewerId(interviewerId)
+                .candidateId(candidateId)
+                .title(title)
+                .status(status)
+                .plannedTime(dateTime)
+                .questions(questions)
+                .build();
+    }
+
     public static InterviewDto createInterviewDto(InterviewDocument interviewDocument) {
         return InterviewDto.builder()
                 .id(interviewDocument.getId().toString())

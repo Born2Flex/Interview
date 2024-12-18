@@ -87,10 +87,11 @@ class InterviewServiceTest {
         String interviewId = "748456789123456789123456";
         Long interviewerId = 1L;
         Long candidateId = 2L;
+        LocalDateTime creationDateTime = LocalDateTime.now();
         interviewDocument = createInterviewDocument(interviewId, interviewerId, candidateId, "Title",
-                InterviewStatus.ACTIVE, List.of(interviewQuestionDocument));
+                InterviewStatus.ACTIVE, creationDateTime, List.of(interviewQuestionDocument));
         newInterviewDocument = createInterviewDocument(interviewId, interviewerId, candidateId, "Title",
-                InterviewStatus.PLANNED, List.of(interviewQuestionDocument));
+                InterviewStatus.PLANNED, creationDateTime, List.of(interviewQuestionDocument));
     }
 
     @Test
