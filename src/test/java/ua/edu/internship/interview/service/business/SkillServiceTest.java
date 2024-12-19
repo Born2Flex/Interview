@@ -1,5 +1,6 @@
 package ua.edu.internship.interview.service.business;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,9 @@ class SkillServiceTest {
     private SkillService underTest;
 
     @Test
-    void testGetAllSkillTrees() {
+    @DisplayName("Should return all existing skill trees from DB")
+    void shouldReturnAllSkillTrees() {
+        // given
         SkillTreeDto tree1 = new SkillTreeDto();
         tree1.setId("tree1");
         tree1.setName("tree 1");
@@ -34,8 +37,10 @@ class SkillServiceTest {
         tree2.setName("tree 2");
         when(skillRepository.findSkillTrees()).thenReturn(List.of(tree1, tree2));
 
+        // when
         List<SkillTreeDto> result = underTest.getAllSkillTrees();
 
+        // then
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("tree1", result.get(0).getId());
@@ -44,13 +49,17 @@ class SkillServiceTest {
     }
 
     @Test
-    void testGetSkillTreeById() {
+    @DisplayName("Should return skill tree by specified root id")
+    void shouldReturnSkillTreeByRootId() {
+        // given
         String skillId = "rootId";
         SkillTreeDto rootTree = getMockSkillTree();
         when(skillRepository.findSkillTreeById(skillId)).thenReturn(Optional.of(rootTree));
 
+        // when
         SkillTreeDto result = underTest.getSkillTreeById(skillId);
 
+        // then
         assertNotNull(result);
         assertEquals(skillId, result.getId());
         assertEquals("root skill", result.getName());
@@ -61,20 +70,28 @@ class SkillServiceTest {
     }
 
     @Test
-    void testGetSkillTreeById_whenTreeNotFound() {
+    @DisplayName("Should throw NoSuchEntity exception, when document with specified root id not found")
+    void shouldThrowExceptionWhenNoDocumentWithSpecifiedRootId() {
+        // given
         String skillId = "aaabbbccc";
         when(skillRepository.findSkillTreeById(skillId)).thenReturn(Optional.empty());
 
+        // when
+        // then
         assertThrows(NoSuchEntityException.class, () -> underTest.getSkillTreeById(skillId));
         verify(skillRepository).findSkillTreeById(skillId);
     }
 
     @Test
-    void testGetAllSkillTrees_whenCollectionIsEmpty() {
+    @DisplayName("Should return empty list when there are no skill trees")
+    void shouldReturnEmptyCollectionWhenNoSkillTrees() {
+        // given
         when(skillRepository.findSkillTrees()).thenReturn(List.of());
 
+        // when
         List<SkillTreeDto> result = underTest.getAllSkillTrees();
 
+        // then
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(skillRepository).findSkillTrees();

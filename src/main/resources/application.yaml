@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   application:
     name: interview
@@ -9,4 +11,7 @@ mongock:
 project:
   version: '@project.version@'
 domain:
-  back: ${BACK_URI:http://localhost:8080}
+  back: ${BACK_URI:http://localhost:8081}
+user:
+  service:
+    url: http://localhost:8080

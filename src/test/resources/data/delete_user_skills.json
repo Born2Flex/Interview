@@ -1,0 +1,9 @@
+{
+  "delete": "user_skills",
+  "deletes": [
+    {
+      "q": {},
+      "limit": 0
+    }
+  ]
+}
